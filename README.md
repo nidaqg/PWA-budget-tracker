@@ -38,7 +38,7 @@ This app makes use of the following technologies:
 
 5. Express
 
-[Click here to view the deployed app](#)
+[Click here to view the deployed app](https://budget-tracker14.herokuapp.com/)
 
 Alternatively, the repo can be downloaded and run locally. All the npm packages are provided in the package.json file and running npm i from the command line will install them all. After that just run 'npm start' to start app.
 
@@ -85,7 +85,7 @@ SOFTWARE.
 
 The repo for this project can be found here: https://github.com/nidaqg/PWA-budget-tracker
 
-Heroku link for deployed project can be found at:  
+Heroku link for deployed project can be found at: https://budget-tracker14.herokuapp.com/
 
 For any questions or to report issues, email me at: nidaqg@gmail.com
 
