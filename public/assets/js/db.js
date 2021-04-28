@@ -2,12 +2,15 @@
 let db;
 const request = indexedDB.open("budget", 1);
 
-request.onupgradeneeded = function(event) {
+request.onupgradeneeded = (event) => {
   const db = event.target.result;
-  db.createObjectStore("pending", { autoIncrement: true });
+  db.createObjectStore("pending", { 
+    keyPath: "id",
+    autoIncrement: true 
+  });
 };
 
-request.onsuccess = function(event) {
+request.onsuccess = (event) => {
   db = event.target.result;
 
   // check if app online
@@ -17,26 +20,26 @@ request.onsuccess = function(event) {
 };
 
 //provide for error
-request.onerror = function(event) {
+request.onerror = (event) => {
   console.log("There seems to be an error " + event.target.errorCode);
 };
 
 //if fetch fails, saveRecord will be called to save trasnsaction 
 function saveRecord(record) {
   // create a transaction on the pending db with readwrite access
-  const transaction = db.transaction(["pending"], "readwrite");
+  const transaction = db.transaction("pending", "readwrite");
   const store = transaction.objectStore("pending");
   store.add(record);
 }
 
-//function called when app is online
+//function called when app goes back online
 function checkDatabase() {
-  const transaction = db.transaction(["pending"], "readwrite");
+  const transaction = db.transaction("pending", "readwrite");
   const store = transaction.objectStore("pending");
   const getAll = store.getAll();
 
   //post all pending transactions stored in indexedDB to online database
-  getAll.onsuccess = function() {
+  getAll.onsuccess = () => {
     if (getAll.result.length > 0) {
       fetch("/api/transaction/bulk", {
         method: "POST",
@@ -49,7 +52,7 @@ function checkDatabase() {
       .then(response => response.json())
       .then(() => {
         // if successful, empty stored transactions from indexedDB
-        const transaction = db.transaction(["pending"], "readwrite");
+        const transaction = db.transaction("pending", "readwrite");
         const store = transaction.objectStore("pending");
         store.clear();
       });
@@ -57,4 +60,5 @@ function checkDatabase() {
   };
 }
 
+//lastly, listen for app coming back online
 window.addEventListener("online", checkDatabase);
